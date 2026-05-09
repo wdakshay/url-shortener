@@ -7,10 +7,10 @@
 /storage/pail
 /storage/framework/cache/data/*
 /storage/framework/sessions/*
-/storage/framework/testing/*
 /storage/framework/views/*
 /storage/logs/*
 /tests
+/storage/framework/testing/*
 .env
 .env.backup
 .env.production
