@@ -162,9 +162,18 @@
             <a href="{{ route('dashboard') }}" class="logo">ShortURL</a>
             <div class="nav-links">
                 <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
-                <a href="{{ route('urls.index') }}" class="{{ request()->routeIs('urls.index') ? 'active' : '' }}">URLs</a>
+                <a href="{{ route('urls.index') }}" class="{{ request()->routeIs('urls.*') ? 'active' : '' }}">URLs</a>
+                @if(Auth::user()->isSuperAdmin())
+                <a href="{{ route('companies.index') }}" class="{{ request()->routeIs('companies.*') ? 'active' : '' }}">Companies</a>
+                @endif
                 @if(Auth::user()->isSuperAdmin() || Auth::user()->isAdmin())
-                <a href="{{ route('team.index') }}" class="{{ request()->routeIs('team.index') ? 'active' : '' }}">Team</a>
+                <a href="{{ route('team.index') }}" class="{{ request()->routeIs('team.*') ? 'active' : '' }}">
+                    @if(Auth::user()->isSuperAdmin())
+                        Clients
+                    @else
+                        Team
+                    @endif
+                </a>
                 @endif
             </div>
         </div>

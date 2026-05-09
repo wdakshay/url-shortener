@@ -16,9 +16,11 @@ class InvitationController extends Controller
         $user = Auth::user();
 
         if ($user->isSuperAdmin()) {
-            $companies = Company::withCount('users')->get();
+            $companies = Company::all();
             $invitations = Invitation::where('status', 'pending')->with('company')->latest()->get();
-            return view('team.index', compact('companies', 'invitations'));
+            // Fetch all users across all companies for SuperAdmin to see
+            $members = User::where('role', '!=', 'superadmin')->with('company')->latest()->get();
+            return view('team.index', compact('companies', 'invitations', 'members'));
         }
 
         $members = User::where('company_id', $user->company_id)->get();
@@ -44,14 +46,13 @@ class InvitationController extends Controller
 
         $companyId = $user->company_id;
 
-        // If SuperAdmin, they must provide a company name and role must be admin
+        // If SuperAdmin, they must select a company and role must be admin
         if ($user->isSuperAdmin()) {
             $request->validate([
-                'company_name' => 'required|string',
+                'company_id' => 'required|exists:companies,id',
                 'role' => 'required|in:admin', // SuperAdmin can only invite Admins
             ]);
-            $company = Company::firstOrCreate(['name' => $request->company_name]);
-            $companyId = $company->id;
+            $companyId = $request->company_id;
         }
 
         $token = Str::random(32);

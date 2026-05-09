@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UrlController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +30,11 @@ Route::middleware('auth')->group(function () {
     // Invitation Management
     Route::get('/team', [InvitationController::class, 'index'])->name('team.index');
     Route::post('/invite', [InvitationController::class, 'invite'])->name('invite');
+
+    // Company Management (SuperAdmin only)
+    Route::middleware('role:superadmin')->group(function () {
+        Route::resource('companies', CompanyController::class)->except(['show']);
+    });
 });
 
 // Public Redirection
