@@ -10,13 +10,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if($errors->has('error'))
-        <div class="alert alert-error">{{ $errors->first('error') }}</div>
-    @endif
-
     <div class="card">
         <div style="overflow-x: auto;">
             <table>
